@@ -14,6 +14,10 @@ and shortcut remotes plus an early Sony camera remote scaffold.
 - `sony_camera_remote`
   - Early UI and input scaffold for a Sony camera remote. Bluetooth command handling
     and Sony camera protocol support are not implemented yet.
+- `sony_a7_iv_remote`
+  - Sony A7 IV remote project with the Sony command protocol, controls UI, and
+    a firmware-integration boundary. It needs the planned Momentum BLE-central
+    firmware extension before it can connect to a camera.
 
 ## Building
 
@@ -34,5 +38,12 @@ Each app's README contains its controls, installation instructions, and troubles
 ## Status
 
 The Enter Remote and RV/MC/INV Remote are functional external-app projects. The
-Sony Camera Remote is exploratory and still contains TODOs for Bluetooth connection
-and camera command transmission.
+older Sony Camera Remote is exploratory. The active Sony work is in
+`sony_a7_iv_remote`; see its README and `SONY_REMOTE_CHECKPOINT.md` for the
+current implementation status.
+
+## Momentum firmware source
+
+The Momentum checkout used to build the forthcoming Sony BLE-central support is
+intentionally not included in this repository. Follow
+[`MOMENTUM_SETUP.md`](MOMENTUM_SETUP.md) to recreate the matching checkout.

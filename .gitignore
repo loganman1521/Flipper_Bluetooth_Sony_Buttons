@@ -20,6 +20,10 @@
 **/.git/
 **/.nested-git-backup/
 
+# Local Momentum firmware checkout. Recreate it from MOMENTUM_SETUP.md rather
+# than committing a full upstream firmware repository inside this project.
+Momentum-Firmware/
+
 # OS files
 .DS_Store
 Thumbs.db
