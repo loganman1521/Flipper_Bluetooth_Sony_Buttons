@@ -1,0 +1,25 @@
+# Flipper Build Tool output
+**/dist/
+**/.vscode/
+*.fap
+*.elf
+
+# Local tooling and agent state
+**/.remember/
+**/.claude/
+*.log
+*.pid
+*.idx
+*.rev
+*.pack
+*.sample
+*.ts
+*.txt
+
+# Nested repository metadata from the source folders
+**/.git/
+**/.nested-git-backup/
+
+# OS files
+.DS_Store
+Thumbs.db

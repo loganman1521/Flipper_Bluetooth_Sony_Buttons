@@ -1,0 +1,12 @@
+App(
+    appid="rvmc_remote",
+    name="RV/MC/INV Remote (BLE)",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="rvmc_remote_app",
+    stack_size=2 * 1024,
+    fap_libs=["ble_profile"],
+    fap_category="Bluetooth",
+    fap_author="loganman",
+    fap_version="1.0",
+    fap_description="BLE keyboard remote that types capitalized text shortcuts: Up types RV, Down types MC, OK types INV.",
+)

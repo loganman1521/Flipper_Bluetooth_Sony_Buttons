@@ -1,0 +1,4 @@
+/rvmc_remote/dist/
+/rvmc_remote/.vscode/
+.remember/
+.claude/settings.local.json

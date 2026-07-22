@@ -1,0 +1,12 @@
+App(
+    appid="sony_camera_remote",
+    name="Sony Camera Remote",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="sony_camera_remote_app",
+    stack_size=2 * 1024,
+    fap_libs=["ble_profile"],
+    fap_category="Bluetooth",
+    fap_author="[Your Name]",
+    fap_version="1.0",
+    fap_description="A bluetooth remote for Sony cameras.",
+)
