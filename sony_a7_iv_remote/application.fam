@@ -1,11 +1,12 @@
 App(
     appid="sony_a7_iv_remote",
     name="Sony A7 IV Remote",
-    apptype=FlipperAppType.EXTERNAL,
+    # This uses private STM32WB central/GATT APIs and must be built into the
+    # matching Momentum firmware; it cannot be loaded as a standalone FAP.
+    apptype=FlipperAppType.APP,
     entry_point="sony_a7_iv_remote_app",
     stack_size=4 * 1024,
-    fap_category="Bluetooth",
-    fap_author="Logan Williams",
-    fap_version="0.1.0",
-    fap_description="Bluetooth shutter and movie controls for the Sony A7 IV.",
+    cdefines=["SONY_BLE_CENTRAL_INTERNAL"],
+    requires=["gui", "notification"],
+    targets=["f7"],
 )

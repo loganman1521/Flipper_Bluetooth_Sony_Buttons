@@ -6,6 +6,7 @@
 #include <furi.h>
 #include <furi_ble/event_dispatcher.h>
 #include <furi_hal_bt.h>
+#include <interface/patterns/ble_thread/tl/tl.h>
 
 #include <string.h>
 
@@ -61,6 +62,8 @@ struct SonyTransport {
     bool pairing_enabled;
     bool write_success;
 };
+
+static bool sony_transport_start_scan(SonyTransport* transport);
 
 static void sony_transport_set_state(SonyTransport* transport, SonyTransportState state) {
     transport->state_callback(state, transport->context);
@@ -190,14 +193,24 @@ static bool sony_transport_enable_notifications(SonyTransport* transport) {
 
 static void sony_transport_handle_advertising_report(
     SonyTransport* transport,
-    const uint8_t* data) {
+    const uint8_t* data,
+    size_t data_size) {
+    if(data_size < 1) return;
+
     const uint8_t report_count = data[0];
     size_t offset = 1;
 
     for(uint8_t report_index = 0; report_index < report_count; ++report_index) {
+        /*
+         * HCI LE advertising reports are variable length. Validate each
+         * record before examining it because malformed reports must never
+         * allow an out-of-bounds read in the BLE event thread.
+         */
+        if(offset + 10 > data_size) return;
         const uint8_t address_type = data[offset + 1];
         const uint8_t* address = &data[offset + 2];
         const uint8_t advertisement_size = data[offset + 8];
+        if(offset + (size_t)10 + advertisement_size > data_size) return;
         const uint8_t* advertisement = &data[offset + 9];
         bool pairing_enabled = false;
 
@@ -408,7 +421,8 @@ static BleEventAckStatus sony_transport_event_callback(void* payload, void* cont
     } else if(packet->evt == HCI_LE_META_EVT_CODE) {
         evt_le_meta_event* meta = (void*)packet->data;
         if(meta->subevent == HCI_LE_ADVERTISING_REPORT_SUBEVT_CODE && transport->scanning) {
-            sony_transport_handle_advertising_report(transport, meta->data);
+            if(packet->plen < 1) return BleEventNotAck;
+            sony_transport_handle_advertising_report(transport, meta->data, packet->plen - 1);
             return BleEventAckFlowEnable;
         } else if(meta->subevent == HCI_LE_CONNECTION_COMPLETE_SUBEVT_CODE) {
             sony_transport_handle_connected(transport, (void*)meta->data);

@@ -16,35 +16,37 @@ Checkpoint created: 2026-07-22 before restarting the computer.
 - Implemented advertisement recognition, protocol packet generation, camera
   status parsing, the connection-state UI, and transport abstraction.
 - Updated uFBT to the Momentum `mntm-012` SDK.
+- Cloned Momentum `dev` at the planned `8ed809fba8af7ac3f09b9495a597d8963f9178a8`
+  baseline.
+- Enabled Momentum's combined BLE peripheral/central GAP role.
+- Integrated the Sony remote as a built-in Momentum app and enabled its
+  central/GATT transport.
+- Installed the official Momentum ARM toolchain and completed successful
+  `./fbt firmware_all` and `./fbt fw_dist` builds.
 
 ## Important finding
 
-The stock/Momentum external-app API exposes BLE peripheral/advertising
-features, but the Sony camera requires the Flipper to be a BLE central/GATT
-client. The current placeholder transport intentionally displays
-`Central firmware required`. The next implementation unit is a firmware-side
-central adapter; the protocol and UI layers are ready to use it.
-
-## Interrupted operation
-
-The official uFBT Windows toolchain downloader was running because the local
-`C:\Users\logan.williams\.ufbt\toolchain\x86_64-windows` directory was empty.
-It was deliberately terminated before reboot. It is safe to rerun.
+The stock/Momentum external-app API exposes BLE peripheral/advertising features,
+but the Sony camera requires the Flipper to be a BLE central/GATT client. The
+app is consequently a built-in component of a custom Momentum build, not an
+external FAP.
 
 ## Resume here
 
-1. Check whether the toolchain finished enough to contain `VERSION` and
-   `bin\arm-none-eabi-gcc.exe`.
-2. If missing, rerun uFBT's official toolchain downloader for version 39.
-3. Run `ufbt` inside `sony_a7_iv_remote` and fix any compiler issues.
-4. Implement the firmware-side combined central/peripheral GAP support and
-   Sony GATT client transport.
-5. Build again, then perform camera pairing and hardware tests.
+1. Install the generated full-firmware `.dfu` from `Momentum-Firmware/dist/f7-C/`.
+2. On the A7 IV, enable Bluetooth Remote Control and open the Bluetooth pairing
+   screen.
+3. Open **Sony A7 IV Remote** on the Flipper and approve pairing on the camera
+   if prompted.
+4. Verify the Up shutter sequence and the OK recording toggle, then capture
+   any connection or GATT errors from the Flipper log.
 
 ## Active implementation plan
 
 1. Repository baseline — complete.
 2. Sony A7 IV protocol verification — complete.
-3. Protocol/transport separation and lifecycle — in progress.
-4. End-to-end shutter and record controls — pending BLE central transport.
-5. Momentum build, install documentation, and hardware validation — pending.
+3. Protocol/transport separation and lifecycle — complete.
+4. End-to-end shutter and record controls — implementation complete; hardware
+   validation pending.
+5. Momentum build and install documentation — complete; hardware validation
+   pending.

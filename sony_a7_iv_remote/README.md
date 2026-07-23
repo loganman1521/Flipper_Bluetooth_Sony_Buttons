@@ -13,18 +13,17 @@ remote mode used by Sony's RMT-P1BT and the ILCE-7M4 (A7 IV).
 - Record button down/up sequence.
 - Flipper UI and connection-state model.
 
-## Current transport limitation
+## Firmware requirement
 
-Sony cameras are BLE peripherals. The remote must scan and connect as a BLE
-central/GATT client. Current Flipper and Momentum external-app APIs expose BLE
-peripheral profiles and advertising, but do not expose central scanning,
-connection, service discovery, or characteristic writes.
+Sony cameras are BLE peripherals, so the Flipper must operate as a BLE central
+and GATT client. This app is therefore built into the custom Momentum firmware
+in this repository; it is not a standalone `.fap`. The firmware uses combined
+peripheral/central GAP support while the app scans for a Sony camera, pairs if
+the camera is in pairing mode, discovers the remote service, then writes the
+button commands and receives status notifications.
 
-For that reason, this revision deliberately reports `Central firmware required`
-instead of advertising a fake keyboard or claiming to control the camera. The
-next implementation unit is a small Momentum firmware extension that enables
-the combined peripheral/central GAP role and exposes a Sony GATT-client adapter
-to this app.
+See [`../MOMENTUM_SETUP.md`](../MOMENTUM_SETUP.md) for the custom firmware
+build and installation path.
 
 ## Intended controls
 
